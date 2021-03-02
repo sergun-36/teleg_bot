@@ -1,10 +1,7 @@
 import requests
 from . import settings
-import logging
 
-logger=logging.getLogger(__name__)
-logging.basicConfig(filename="log.txt",format='%(asctime)s - %(message)s', datefmt='%d-%b-%y %H:%M:%S')
-
+logger=settings.logger
 
 class TelegBot():
 	root_url=f"{settings.teleg_root_url}{settings.bot_token}"
@@ -16,7 +13,7 @@ class TelegBot():
 
 			if status_code in settings.ok_codes:
 				result=response.json()
-				logger.warning(f"Updates was successful. Status {status_code}")
+				logger.debug(f"Updates was successful. Status {status_code}")
 			else:
 				result={"ok" : False,
 						"error_message" : f"Response code: {status_code}"}
