@@ -54,7 +54,7 @@ class TelegBot():
 				if updates["result"]:
 					dynamic_last_message_id=updates["result"][-1]["message"]["message_id"]
 					if dynamic_last_message_id > last_message_id:
-						self.send_message(chat_id=167233877, text="I am working")
+						self.send_message(chat_id=465377698, text="I am working")
 						last_message_id=dynamic_last_message_id
 			else:
 				print(f"Can\'t take updates : {updates['error_message']}")
