@@ -3,20 +3,20 @@ version: 1
 formatters:
   simple:
     format: '%(asctime)s -  %(message)s in method %(funcName)s on line  %(lineno)d in file %(filename)s'
-  error:
-    format: '%(lineno)d | %(filename)s | %(asctime)s | '
+  warning:
+    format: '%(asctime)s | %(levelname)s | %(message)s | %(lineno)d | %(filename)s |'
 handlers:
   console:
     class: logging.StreamHandler
     level: INFO
     formatter: simple
-  file:
+  file_warning:
     class: logging.FileHandler
-    level: DEBUG
-    filename: log.txt
-    formatter: error
+    level: WARNING
+    filename: log_warning.txt
+    formatter: warning
 loggers:
   simpleExample:
-    level: DEBUG
-    handlers: [console, file]
+    level: WARNING
+    handlers: [console, file_warning]
 

@@ -4,24 +4,25 @@ from . import settings
 logger=settings.logger
 
 class TelegBot():
-	root_url=f"{settings.teleg_root_url}{settings.bot_token}"
+	root_url=settings.TELEG_ROOT_URL
 	
 	def get_updates(self):
 		try:
 			response=requests.get(f"{self.root_url}/getUpdates")
 			status_code=response.status_code
 
-			if status_code in settings.ok_codes:
+			if status_code in settings.OK_CODES:
 				result=response.json()
-				logger.debug(f"Updates was successful. Status {status_code}")
+				logger.info(f"Updates was successfull. Status {status_code}")
 			else:
 				result={"ok" : False,
 						"error_message" : f"Response code: {status_code}"}
-				print(f"Updates was not get successful. Status {status_code}")
+				logger.warning(f"Updates did not get successfull. Status {status_code}")
 
 			return result
 
 		except Exception as e:
+			logger.error(f"Request was failed: {e}")
 			raise Exception(f"Request was failed: {e}")
 
 
@@ -30,13 +31,13 @@ class TelegBot():
 				"text" : text}
 		try:
 			res=requests.post(f"{self.root_url}/sendMessage", data)
-			print(res)
-			if res.status_code in settings.ok_codes:
-				print(f"Message was sent successful with status {res.status_code}")
+			if res.status_code in settings.OK_CODES:
+				logger.info(f"Message was sent successful with status {res.status_code}")
 			else:
-				print(f"Message was not sent with status {res.status_code}")
-
+				logger.warning(f"Message was not sent with status {res.status_code}")
+				
 		except Exception as e:
+			logger.error(f"Request was failed: {e}")
 			raise Exception(f"Request was failed: {e}")
 
 
@@ -53,6 +54,8 @@ class TelegBot():
 					if dynamic_last_message_id > last_message_id:
 						self.send_message(chat_id=465377698, text="I am working")
 						last_message_id=dynamic_last_message_id
+				else:
+					logger.info("Bot haven't updates while")
 			else:
 				print(f"Can\'t take updates : {updates['error_message']}")
 

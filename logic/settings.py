@@ -5,8 +5,8 @@ import os
 
 dotenv.load_dotenv(".env")
 bot_token=os.environ['TOKEN']
-teleg_root_url="https://api.telegram.org/bot"
-ok_codes=(200, 201, 202)
+TELEG_ROOT_URL=f"https://api.telegram.org/bot{bot_token}"
+OK_CODES=(200, 201, 202)
 
 with open("logging.yaml", "r") as file :
 	log_yaml_conf = yaml.safe_load(file.read())
