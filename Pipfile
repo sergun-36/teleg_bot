@@ -18,6 +18,7 @@ urllib3 = "==1.26.2"
 virtualenv = "==20.4.2"
 virtualenv-clone = "==0.5.4"
 PyYAML = "==5.4.1"
+beautifulsoup4 = "*"
 
 [dev-packages]
 
