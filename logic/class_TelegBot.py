@@ -17,7 +17,7 @@ class TelegBot():
 			else:
 				result={"ok" : False,
 						"error_message" : f"Response code: {status_code}"}
-				logger.warning(f"Updates did not get successfull. Status {status_code}")
+				logger.warning(f"Updates didn't get. Status {status_code}")
 
 			return result
 
@@ -58,4 +58,5 @@ class TelegBot():
 					logger.info("Bot haven't updates while")
 			else:
 				print(f"Can\'t take updates : {updates['error_message']}")
+				logger.warning(f"Can\'t take updates : {updates['error_message']}")
 

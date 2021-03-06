@@ -1,2 +1,4 @@
 /__pycache__/
 log.txt
+log_warning.txt
+.env
