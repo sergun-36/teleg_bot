@@ -1,4 +1,4 @@
-from  logic.class_TelegBot import TelegBot
+from  logic.TelegBot import TelegBot
 
 bot=TelegBot()
 #bot.get_updates()
