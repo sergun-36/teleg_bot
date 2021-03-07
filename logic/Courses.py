@@ -59,25 +59,15 @@ class Courses():
 
 
 	"""
-	get cur ID of currency by money abbreviation.
-	"""
-	def get_curr_id_by_abbr(self, money_abbr=""):
-		curr_data=self.get_currencies_on_date_by_abbr(money_abbr=money_abbr)
-		if curr_data["ok"]:
-			curr_id=curr_data["curr"]["Cur_ID"]
-			logger.info(f"cur_id {curr_id} for \'{money_abbr}\' get successfull")
-			return curr_id
-		else:
-			logger.warning(f"cur_id did not get for \'{money_abbr}\'")
-
-	"""
 	get dynamics rate of currency for period(from today) by money abbreviation 
 	"""
 	def get_dynamic_rate_by_perid_money_abbr(self, money_abbr="", period=3):
-		cur_id=self.get_curr_id_by_abbr(money_abbr=money_abbr)
-		if cur_id:
+		result=self.get_currencies_on_date_by_abbr(money_abbr=money_abbr)
+		if result["ok"]:
+			cur_id=result["curr"]["Cur_ID"]
+			scale=result["curr"]["Cur_Scale"]
 			end_date=datetime.date.today()
-			start_date=datetime.datetime.now()-datetime.timedelta(days=period+1)#.date()
+			start_date=datetime.datetime.now()-datetime.timedelta(days=period)#.date()
 			url=f"{self.rb_bank_root_url}/Dynamics/{cur_id}?startDate={start_date}&endDate={end_date}"
 
 			try:
@@ -86,6 +76,8 @@ class Courses():
 
 				if status in settings.OK_CODES:
 					result={"ok" : True,
+							"curr_abbr" : money_abbr,
+							"scale" : scale,
 							"curr_dynamic" : res.json()}
 					logger.info(f"Currency dynamic \'{money_abbr}\' for {period} days got successfull. Status {status}")
 				else:
@@ -104,8 +96,4 @@ class Courses():
 		return result
 
 		
-
-
-
-
 
