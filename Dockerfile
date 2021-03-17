@@ -3,4 +3,4 @@ COPY . /app
 WORKDIR /app
 RUN pip install pipenv
 RUN pipenv install --system
-CMD [ "echo", "hello"]
+CMD [ "python", "run.py"]
