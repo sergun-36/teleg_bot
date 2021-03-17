@@ -12,6 +12,7 @@ class TextAnalyzer():
 		if text.find("сегодн") > -1 or text.find("сейчас") > -1:
 			date = datetime.date.today()
 			return date
+			
 		if text.find("на") > -1:
 			words = text.split(" ")
 			index_date = words.index("на")+1
