@@ -55,7 +55,7 @@ class TelegBot():
 						self.send_message(chat_id=465377698, text="I am working")
 						last_message_id=dynamic_last_message_id
 				else:
-					logger.info("Bot haven't updates while")
+					logger.info("Bot hasn't new message while")
 			else:
 				print(f"Can\'t take updates : {updates['error_message']}")
 				logger.warning(f"Can\'t take updates : {updates['error_message']}")
