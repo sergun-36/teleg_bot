@@ -1,6 +1,4 @@
-import settings
-from Courses import Courses
-
+from . import settings
 
 logger=settings.logger
 
@@ -9,13 +7,13 @@ class PreparerText():
 	"""
 	prepare text message for rates of currency on date.It extracts data from dict currency_on_date_by_abbr 
 	"""
-	def do_courses_on_date_text(self, currs_on_date_by_abbr):
+	def do_courses_on_date_text(self, currs_on_date_by_abbr={"ok": False, "error_message": None}):
 		if currs_on_date_by_abbr["ok"]:
 			scale=currs_on_date_by_abbr["curr"]["Cur_Scale"]
 			rate=currs_on_date_by_abbr["curr"]["Cur_OfficialRate"]
 			date=currs_on_date_by_abbr["curr"]["Date"][0:10]
 			curr_abbr=currs_on_date_by_abbr["curr"]["Cur_Abbreviation"]
-			text=f"{scale} {curr_abbr} costs {rate} BYN"
+			text=f"{scale} {curr_abbr} costs {rate} BYN on {date}"
 			logger.info(f"Text {curr_abbr} on {date} is prepared")
 		else:
 			logger.warning(f"Text   is not prepared. There is no data of currs")
@@ -26,7 +24,7 @@ class PreparerText():
 	"""
 	prepare text message. format {date} {rate}. date extract dict
 	"""			
-	def do_courses_dynamics_text(self, curr_dynamic_data):
+	def do_courses_dynamics_text(self, curr_dynamic_data={"ok": False, "error_message": None}):
 		if curr_dynamic_data["ok"]:
 			scale= curr_dynamic_data["scale"]
 			curr_abbr= curr_dynamic_data["curr_abbr"]
@@ -46,7 +44,7 @@ class PreparerText():
 	"""
 	prepare text format date: change from now_day to prev_day
 	"""
-	def do_courses_changes_text(self, curr_dynamic_data):
+	def do_courses_changes_text(self, curr_dynamic_data={"ok": False, "error_message": None}):
 		if curr_dynamic_data["ok"]:
 			scale= curr_dynamic_data["scale"]
 			curr_abbr= curr_dynamic_data["curr_abbr"]
@@ -63,7 +61,7 @@ class PreparerText():
 
 		return text
 
-
+'''
 currs={'ok': True, 'curr_abbr': 'USD', 'scale': 1, 'curr_dynamic': [{'Cur_ID': 145, 'Date': '2021-03-04T00:00:00', 'Cur_OfficialRate': 2.6073}, {'Cur_ID': 145, 'Date': '2021-03-05T00:00:00', 'Cur_OfficialRate': 2.608}, {'Cur_ID': 145, 'Date': '2021-03-06T00:00:00', 'Cur_OfficialRate': 2.6105}, {'Cur_ID': 145, 'Date': '2021-03-07T00:00:00', 'Cur_OfficialRate': 2.6105}]}
 
 courses=Courses()
@@ -72,3 +70,4 @@ currs=courses.get_dynamic_rate_by_perid_money_abbr("USD")
 preparator=PreparerText()
 text=preparator.do_courses_changes_text(currs)
 print(text)
+'''

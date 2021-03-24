@@ -1,5 +1,5 @@
 import requests
-import settings
+from . import settings
 import datetime
 
 logger=settings.logger
@@ -61,7 +61,7 @@ class Courses():
 	"""
 	get dynamics rate of currency for period(from today) by money abbreviation 
 	"""
-	def get_dynamic_rate_by_perid_money_abbr(self, money_abbr="", period=3):
+	def get_dynamic_rate_by_periоd_money_abbr(self, money_abbr="", period=3):
 		result=self.get_currencies_on_date_by_abbr(money_abbr=money_abbr)
 		if result["ok"]:
 			cur_id=result["curr"]["Cur_ID"]
