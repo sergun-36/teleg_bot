@@ -1,9 +1,11 @@
 import datetime
-import settings
+from . import settings
+from .PreparerText import PreparerText
+from .Courses import Courses
 
 logger=settings.logger
 
-class TextAnalyzer():
+class TextAnalyzer(PreparerText, Courses):
 
 	
 	"""
@@ -12,6 +14,7 @@ class TextAnalyzer():
 	def set_data(self, **kwargs):
 		for key, value in kwargs.items():
 			setattr(self, key,  value)
+			logger.info(f"{key} = {value}. Attribut added")
 
 	"""
 	Search key words "сегодня" and "сейчас".Return date today
@@ -51,11 +54,12 @@ class TextAnalyzer():
 		if check_str in text:
 			words = text.split(" ")
 			index_curr = words.index(check_str)+1
-			curr = words[index_curr].upper()
-			logger.info(f"Currency {curr} is recieved")
-			self.set_data(curr=curr)
-			return curr
-
+			if index_curr < len(words):
+				curr = words[index_curr].upper()
+				logger.info(f"Currency {curr} is recieved")
+				self.set_data(curr=curr)
+				return curr
+		self.set_data(curr=None)
 		logger.warning("Currency is not recieved")
 
 
@@ -99,23 +103,30 @@ class TextAnalyzer():
 		if self.type == "rate_on_date":
 			if self.curr:
 				if self.date:
-					answer_text = "all ak"
-					logger.info("Message on date is oks")
-
+					currs_on_date_by_abbr = self.get_currencies_on_date_by_abbr(money_abbr=self.curr, date=self.date)
+					answer_text = self.do_courses_on_date_text(currs_on_date_by_abbr=currs_on_date_by_abbr)
+					logger.info("Message on date is ok")
 				else:
 					logger.info("Message anser - Date in not founded")
 					answer_text = "Enter please Date after keyword \"на\" in format YYYY-MM-DD"
 			else:
-				logger.info("Message anser - Currency in not founded")
+				logger.info("Message anwser - Currency in not founded")
 				answer_text = "Enter please currency abbreviation after keyword \"курс\""
+
 		if self.type == "rate_dynamic":
 			if self.curr:
 				if self.period:
-					answer_text = "динамика"
+					curr_dynamic_data = self.get_dynamic_rate_by_periоd_money_abbr(period=self.period, money_abbr=self.curr)
+					answer_text = self.do_courses_dynamics_text(curr_dynamic_data=curr_dynamic_data)
 				else:
+					logger.info("Message answer - period in not founded ")
 					answer_text= " Enter please period as ceil number"
+			else:
+				logger.info("Message anwser - Currency in not founded")
+				answer_text = "Enter please currency abbreviation after keyword \"курс\""
 
 		if  self.type == "echo":
+			logger.info("Message answer - echo(repeat)")
 			answer_text = text
 
 		return answer_text
@@ -132,7 +143,8 @@ class TextAnalyzer():
 		text = self.prepare_anwer(text)
 		return text
 
-
+"""
 text = TextAnalyzer()
-words = text.do_analys_text("динамика курса usd за ")
+words = text.do_analys_text("just repeat this ")
 print(words)
+"""

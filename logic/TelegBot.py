@@ -1,9 +1,11 @@
 import requests
 from . import settings
 
+from .TextAnalyzer import TextAnalyzer
+
 logger=settings.logger
 
-class TelegBot():
+class TelegBot(TextAnalyzer):
 	root_url=settings.TELEG_ROOT_URL
 	
 	def get_updates(self):
@@ -52,10 +54,14 @@ class TelegBot():
 				if updates["result"]:
 					dynamic_last_message_id=updates["result"][-1]["message"]["message_id"]
 					if dynamic_last_message_id > last_message_id:
-						self.send_message(chat_id=465377698, text="I am working")
+						chat_id = updates["result"][-1]["message"]["chat"]["id"]
+						text = updates["result"][-1]["message"]["text"]
+						text_answer=self.do_analys_text(text)
+						self.send_message(chat_id=chat_id, text=text_answer)
 						last_message_id=dynamic_last_message_id
 				else:
-					logger.info("Bot hasn't new message while")
+					pass
+					#logger.info("Bot hasn't new message while")
 			else:
 				print(f"Can\'t take updates : {updates['error_message']}")
 				logger.warning(f"Can\'t take updates : {updates['error_message']}")
