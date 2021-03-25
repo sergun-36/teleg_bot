@@ -12,7 +12,8 @@ logger=logging.getLogger('simpleExample')
 dotenv.load_dotenv(".env")
 bot_token=os.environ['TOKEN']
 
-TELEG_ROOT_URL=f"https://api.telegram.org/bot{bot_token}"
-OK_CODES=(200, 201, 202)
-RB_BANK_ROOT_URL="https://www.nbrb.by/api/exrates/rates"
+TELEG_ROOT_URL = f"https://api.telegram.org/bot{bot_token}"
+OK_CODES = (200, 201, 202)
+RB_BANK_ROOT_URL = "https://www.nbrb.by/api/exrates/rates"
+URL_PS4 = "https://store.playstation.com/ru-ru/category/6641d1dc-f19e-4315-a5af-368b5f59b6e9"
 
