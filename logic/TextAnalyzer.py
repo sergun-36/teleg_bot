@@ -2,6 +2,12 @@ import datetime
 from . import settings
 from .PreparerText import PreparerText
 from .Courses import Courses
+"""
+import settings
+from PreparerText import PreparerText
+from Courses import Courses
+"""
+from . import settingsTut
 
 logger=settings.logger
 
@@ -73,6 +79,8 @@ class TextAnalyzer(PreparerText, Courses):
 				type = "rate_dynamic"
 			else:
 				type = "rate_on_date"
+		if "кино" in text:
+			type = "movies"
 		else:
 			type = "echo"
 		logger.info(f"Type of user message - {type}")
@@ -125,6 +133,11 @@ class TextAnalyzer(PreparerText, Courses):
 				logger.info("Message anwser - Currency in not founded")
 				answer_text = "Enter please currency abbreviation after keyword \"курс\""
 
+		if self.type == "movies":
+			movies = settingsTut.movies
+			answer_text = self.do_movies_text(movies)
+			logger.info("Message answer movies is successfull")
+
 		if  self.type == "echo":
 			logger.info("Message answer - echo(repeat)")
 			answer_text = text
@@ -143,8 +156,7 @@ class TextAnalyzer(PreparerText, Courses):
 		text = self.prepare_anwer(text)
 		return text
 
-"""
+
 text = TextAnalyzer()
-words = text.do_analys_text("just repeat this ")
+words = text.do_analys_text("кино")
 print(words)
-"""
