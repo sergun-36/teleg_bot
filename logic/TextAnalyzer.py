@@ -1,17 +1,21 @@
+
+
 import datetime
 from . import settings
 from .PreparerText import PreparerText
 from .Courses import Courses
+from .ParserTut import ParserTut
 """
 import settings
 from PreparerText import PreparerText
 from Courses import Courses
+from ParserTut import ParserTut
 """
-from . import settingsTut
+
 
 logger=settings.logger
 
-class TextAnalyzer(PreparerText, Courses):
+class TextAnalyzer(PreparerText, Courses, ParserTut):
 
 	
 	"""
@@ -79,7 +83,7 @@ class TextAnalyzer(PreparerText, Courses):
 				type = "rate_dynamic"
 			else:
 				type = "rate_on_date"
-		if "кино" in text:
+		elif "кино" in text:
 			type = "movies"
 		else:
 			type = "echo"
@@ -134,8 +138,9 @@ class TextAnalyzer(PreparerText, Courses):
 				answer_text = "Enter please currency abbreviation after keyword \"курс\""
 
 		if self.type == "movies":
-			movies = settingsTut.movies
-			answer_text = self.do_movies_text(movies)
+			movies = self.get_movies_info()
+			answer_text = self.do_movies_text(movies)[:4096]
+			print(len(answer_text))
 			logger.info("Message answer movies is successfull")
 
 		if  self.type == "echo":
@@ -156,7 +161,8 @@ class TextAnalyzer(PreparerText, Courses):
 		text = self.prepare_anwer(text)
 		return text
 
-
+"""
 text = TextAnalyzer()
 words = text.do_analys_text("кино")
 print(words)
+"""

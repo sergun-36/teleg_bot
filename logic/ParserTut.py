@@ -1,6 +1,7 @@
 import requests
 from bs4 import BeautifulSoup
-import settings
+#import settings
+from . import settings
 
 
 logger = settings.logger
@@ -34,10 +35,7 @@ class ParserTut():
 		soup_html = BeautifulSoup(movies_html, "lxml")
 		divs = soup_html.find_all("div", class_="a-event-i")
 		logger.info(f"Printim links")
-		for div in divs:
-			#print(div)
-			return div
-			pass
+
 		return divs
 		
 
@@ -46,9 +44,8 @@ class ParserTut():
 		cinemas_tag = div.find_all("a", class_="header__link", title= True)
 		for cinema in cinemas_tag:
 			if cinema.string:
-				print(cinema.string)
+				logger.info(f"Cinema is parsed")
 				return cinema.string
-		logger.info(f"Printim links")
 
 
 	def get_films_info(self, div):
@@ -58,6 +55,7 @@ class ParserTut():
 			if film.string:
 				films.append(film.string)
 				#print(film.string)
+		logger.info("Films is parsed")
 		return films
 
 	def get_time_film(self, film):
@@ -65,23 +63,25 @@ class ParserTut():
 
 		times_tag = film.parent.parent.parent.find_all('time')
 		for time in times_tag:
-			print(time["datetime"])
-			times.append(time["datetime"])
-
+			#print(time["datetime"][11:16])
+			times.append(time["datetime"][11:16])
+		logger.info(f"Times is parsed")
 		return times
-		logger.info(f"Printim time")
+		
 
 
-	def get_movies_info(self, movies_html):
+	def get_movies_info(self):
+		movies_html = self.get_all_info_movies()
 		movies={}
-		div = self.get_comun_divs(movies_html)
-		#loop for div in divs
-		cinema = self.get_cinemas_info(div)
-		movies[str(cinema)]={}
-		films = self.get_films_info(div)
-		for film in films:
-			times = self.get_time_film(film)
-			movies[str(cinema)][str(film)]= times
+		divs = self.get_comun_divs(movies_html)
+		for div in divs:
+			cinema = self.get_cinemas_info(div)
+			movies[str(cinema)]={}
+			films = self.get_films_info(div)
+			for film in films:
+				movies[str(cinema)][str(film)] = {}
+				times = self.get_time_film(film)
+				movies[str(cinema)][str(film)]["time"] = times
 		return movies
 
 
@@ -89,14 +89,14 @@ class ParserTut():
 
 
 
-
+"""
 	
 parser = ParserTut()
 movies_html = parser.get_all_info_movies()
 
 movies = parser.get_movies_info(movies_html)
 print(movies)
-'''
+
 div = parser.get_comun_divs(movies_html)
 films = parser.get_films_info(div)
 for film in films:
@@ -105,4 +105,4 @@ for film in films:
 print(times)
 #cinemas = parser.get_movies_info(div)
 #links=parser.get_links_info(movies_html)
-'''
+"""
