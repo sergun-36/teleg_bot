@@ -109,7 +109,7 @@ class TextAnalyzer(PreparerText, Courses, ParserTut):
 		self.set_data(period=period)
 
 	"""
-	prepare answer message for user. 
+	prepare answer message for user and cut it, if it is too large
 	"""
 	def prepare_anwer(self, text):
 		if self.type == "rate_on_date":
@@ -139,7 +139,7 @@ class TextAnalyzer(PreparerText, Courses, ParserTut):
 
 		if self.type == "movies":
 			movies = self.get_movies_info()
-			answer_text = self.do_movies_text(movies)[:4096]
+			answer_text = self.do_movies_text(movies)
 			print(len(answer_text))
 			logger.info("Message answer movies is successfull")
 
@@ -147,6 +147,9 @@ class TextAnalyzer(PreparerText, Courses, ParserTut):
 			logger.info("Message answer - echo(repeat)")
 			answer_text = text
 
+		if len(answer_text) > settings.MAX_LIMIT_TEXT:
+			answer_text = answer_text[0:settings.MAX_LIMIT_TEXT]
+			logger.warning("Message is too large and was cut")
 		return answer_text
 
 

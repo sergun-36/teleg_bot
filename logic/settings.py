@@ -21,3 +21,5 @@ RB_BANK_ROOT_URL = "https://www.nbrb.by/api/exrates/rates"
 
 
 TUT_MOVIES_URL = "https://afisha.tut.by/film/"
+
+MAX_LIMIT_TEXT = 4096

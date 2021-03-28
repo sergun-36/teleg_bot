@@ -67,8 +67,8 @@ class PreparerText():
 	"""
 	Prepare movies text from dict with cinemas and films. It returns str
 	"""
-	def do_movies_text(self, movies=""):
-		if movies:
+	def do_movies_text(self, movies_info=""):
+		if movies_info["ok"]:
 			text = "List of cinemas:"
 			for cinema in movies:
 				text += f"\n{cinema}"
@@ -81,8 +81,8 @@ class PreparerText():
 			logger.info("Movies text is prepared")
 
 		else:
-			logger.warning(f"There are no movies")
-			text = f"There are no movies"
+			logger.warning(f"There are no movies.{movies_info['error_message']}")
+			text = f"{movies_info['error_message']}"
 		return text	
 
 
