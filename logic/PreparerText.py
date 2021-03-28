@@ -1,4 +1,6 @@
 from . import settings
+#import settings
+#import settingsTut
 
 logger=settings.logger
 
@@ -61,13 +63,34 @@ class PreparerText():
 
 		return text
 
-'''
-currs={'ok': True, 'curr_abbr': 'USD', 'scale': 1, 'curr_dynamic': [{'Cur_ID': 145, 'Date': '2021-03-04T00:00:00', 'Cur_OfficialRate': 2.6073}, {'Cur_ID': 145, 'Date': '2021-03-05T00:00:00', 'Cur_OfficialRate': 2.608}, {'Cur_ID': 145, 'Date': '2021-03-06T00:00:00', 'Cur_OfficialRate': 2.6105}, {'Cur_ID': 145, 'Date': '2021-03-07T00:00:00', 'Cur_OfficialRate': 2.6105}]}
 
-courses=Courses()
-currs=courses.get_dynamic_rate_by_perid_money_abbr("USD")
+	"""
+	Prepare movies text from dict with cinemas and films. It returns str
+	"""
+	def do_movies_text(self, movies_info=""):
+		if movies_info["ok"]:
+			text = "List of cinemas:"
+			for cinema in movies:
+				text += f"\n{cinema}"
+				
+				for film in movies[cinema]:
+					text +=f"\n 	{film}: "
+					for time in movies[cinema][film]["time"]:
+						text += f"({time}), "
+			text +="."
+			logger.info("Movies text is prepared")
 
+		else:
+			logger.warning(f"There are no movies.{movies_info['error_message']}")
+			text = f"{movies_info['error_message']}"
+		return text	
+
+
+
+
+
+"""
 preparator=PreparerText()
-text=preparator.do_courses_changes_text(currs)
+text=preparator.do_movies_text(settingsTut.movies)
 print(text)
-'''
+"""

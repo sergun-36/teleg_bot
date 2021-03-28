@@ -19,6 +19,7 @@ virtualenv = "==20.4.2"
 virtualenv-clone = "==0.5.4"
 PyYAML = "==5.4.1"
 beautifulsoup4 = "*"
+lxml = "*"
 
 [dev-packages]
 

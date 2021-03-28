@@ -1,11 +1,21 @@
+
+
 import datetime
 from . import settings
 from .PreparerText import PreparerText
 from .Courses import Courses
+from .ParserTut import ParserTut
+"""
+import settings
+from PreparerText import PreparerText
+from Courses import Courses
+from ParserTut import ParserTut
+"""
+
 
 logger=settings.logger
 
-class TextAnalyzer(PreparerText, Courses):
+class TextAnalyzer(PreparerText, Courses, ParserTut):
 
 	
 	"""
@@ -73,6 +83,8 @@ class TextAnalyzer(PreparerText, Courses):
 				type = "rate_dynamic"
 			else:
 				type = "rate_on_date"
+		elif "кино" in text:
+			type = "movies"
 		else:
 			type = "echo"
 		logger.info(f"Type of user message - {type}")
@@ -97,7 +109,7 @@ class TextAnalyzer(PreparerText, Courses):
 		self.set_data(period=period)
 
 	"""
-	prepare answer message for user. 
+	prepare answer message for user and cut it, if it is too large
 	"""
 	def prepare_anwer(self, text):
 		if self.type == "rate_on_date":
@@ -125,10 +137,19 @@ class TextAnalyzer(PreparerText, Courses):
 				logger.info("Message anwser - Currency in not founded")
 				answer_text = "Enter please currency abbreviation after keyword \"курс\""
 
+		if self.type == "movies":
+			movies = self.get_movies_info()
+			answer_text = self.do_movies_text(movies)
+			print(len(answer_text))
+			logger.info("Message answer movies is successfull")
+
 		if  self.type == "echo":
 			logger.info("Message answer - echo(repeat)")
 			answer_text = text
 
+		if len(answer_text) > settings.MAX_LIMIT_TEXT:
+			answer_text = answer_text[0:settings.MAX_LIMIT_TEXT]
+			logger.warning("Message is too large and was cut")
 		return answer_text
 
 
@@ -145,6 +166,6 @@ class TextAnalyzer(PreparerText, Courses):
 
 """
 text = TextAnalyzer()
-words = text.do_analys_text("just repeat this ")
+words = text.do_analys_text("кино")
 print(words)
 """
