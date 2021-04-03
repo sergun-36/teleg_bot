@@ -81,7 +81,8 @@ class ParserMovieKiev():
 	def get_film(self, div):
 		if div:
 			film = div.find("a", class_="movie__title")
-			film = film.string
+			print(film)
+			film = film.next_element
 			return film
 
 
@@ -96,11 +97,15 @@ class ParserMovieKiev():
 					if cinemas_tag:
 						for cinema in cinemas_tag:
 							if cinema:
+								if not str(cinema) in cinema_name:
+									cinema_name[str(cinema)] = {}
+									
 								times = self.get_times(cinema)
 								film = self.get_film(div)
+								cinema_name[str(cinema)][str(film)] = times
 
-								return film
-				return cinemas
+								
+				return cinema_name
 
 
 
