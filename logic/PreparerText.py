@@ -70,12 +70,14 @@ class PreparerText():
 	def do_movies_text(self, movies_info=""):
 		if movies_info["ok"]:
 			text = "List of cinemas:"
-			for cinema in movies:
+			for cinema in movies_info:
+				if cinema == "ok":
+					continue
 				text += f"\n{cinema}"
 				
-				for film in movies[cinema]:
+				for film in movies_info[cinema]:
 					text +=f"\n 	{film}: "
-					for time in movies[cinema][film]["time"]:
+					for time in movies_info[cinema][film]["time"]:
 						text += f"({time}), "
 			text +="."
 			logger.info("Movies text is prepared")

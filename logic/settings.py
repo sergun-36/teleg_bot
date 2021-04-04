@@ -25,3 +25,5 @@ TUT_MOVIES_URL = "https://afisha.tut.by/film/"
 KIEV_MOVIES_URL = "https://kinoafisha.ua/kinoafisha/"
 
 MAX_LIMIT_TEXT = 4096
+
+CITIES = ("Минск", "Киев", "Minsk", "Kiev")

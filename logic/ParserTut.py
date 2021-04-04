@@ -113,10 +113,10 @@ class ParserTut():
 	"""
 	get all movies info and transform it to dict
 	"""
-	def get_movies_info(self):
+	def get_movies_info_minsk(self):
 		movies_html = self.get_movies_html()
 		if movies_html:
-			movies_info={}
+			movies_info={"ok": True}
 			divs = self.get_comun_divs(movies_html)
 			if divs["ok"]:
 				for div in divs["divs"]:

@@ -5,6 +5,7 @@ from . import settings
 from .PreparerText import PreparerText
 from .Courses import Courses
 from .ParserTut import ParserTut
+from .ParserMovieKiev import ParserMovieKiev
 """
 import settings
 from PreparerText import PreparerText
@@ -15,7 +16,7 @@ from ParserTut import ParserTut
 
 logger=settings.logger
 
-class TextAnalyzer(PreparerText, Courses, ParserTut):
+class TextAnalyzer(PreparerText, Courses, ParserTut, ParserMovieKiev):
 
 	
 	"""
@@ -109,6 +110,23 @@ class TextAnalyzer(PreparerText, Courses, ParserTut):
 		self.set_data(period=period)
 
 	"""
+	get city from text for movies request
+	"""
+	def get_city_from_text(self, text):
+		text = text.title()
+		words = text.split(" ")
+		for word in words:
+			if word in settings.CITIES:
+				city = word
+				logger.info(f"City {city} is founded")
+				break
+		else:
+			logger.warning("City is not founded")
+			city = None
+
+		self.set_data(city=city)
+
+	"""
 	prepare answer message for user and cut it, if it is too large
 	"""
 	def prepare_anwer(self, text):
@@ -138,10 +156,19 @@ class TextAnalyzer(PreparerText, Courses, ParserTut):
 				answer_text = "Enter please currency abbreviation after keyword \"курс\""
 
 		if self.type == "movies":
-			movies = self.get_movies_info()
-			answer_text = self.do_movies_text(movies)
-			print(len(answer_text))
-			logger.info("Message answer movies is successfull")
+
+			if self.city:
+				if self.city == "Minsk" or self.city == "Минск":
+					movies = self.get_movies_info_minsk()
+				else:
+					movies = self.get_movies_info_kiev()
+				answer_text = self.do_movies_text(movies)
+				print(len(answer_text))
+				logger.info("Message answer movies is successfull")
+			else:
+				answer_text = "Enter please city Минск or Киев"
+				logger.warning("City is not founded")
+
 
 		if  self.type == "echo":
 			logger.info("Message answer - echo(repeat)")
@@ -161,6 +188,9 @@ class TextAnalyzer(PreparerText, Courses, ParserTut):
 		if self.type == "rate_dynamic":
 			self.get_curr_from_text(text)
 			self.get_period_from_text(text)
+		if self.type == "movies":
+			self.get_city_from_text(text)
+
 		text = self.prepare_anwer(text)
 		return text
 
