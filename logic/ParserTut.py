@@ -43,17 +43,17 @@ class ParserTut():
 			divs = soup_html.find_all("div", class_="a-event-i")
 			if divs:
 				logger.info("Divs with info get success")
-				divs = {"ok": True,
+				divs_info = {"ok": True,
 						"divs": divs}
 			else:
 				logger.warning("Divs are empty")
-				divs = {"ok": False,
+				divs_info = {"ok": False,
 						"error_message": "Divs are empty"}
 		else:
 			logger.warning(f"{movies_html['error_message']}")
-			divs = {"ok": False,
+			divs_info = {"ok": False,
 					"error_message": "Divs don't get because html is empty "}
-		return divs
+		return divs_info
 		
 
 	"""
@@ -115,14 +115,14 @@ class ParserTut():
 	"""
 	def get_movies_info_minsk(self):
 		movies_html = self.get_movies_html()
-		if movies_html:
+		if movies_html.get("ok"):
 			movies_info={"ok": True}
 			divs = self.get_comun_divs(movies_html)
-			if divs["ok"]:
+			if divs.get("ok"):
 				for div in divs["divs"]:
 					cinema = self.get_cinemas_info(div)
 					if cinema:
-						movies_info[str(cinema)]={}
+						movies_info[str(cinema)] = {}
 						films = self.get_films_info(div)
 						if films["ok"]:
 							for film in films["films"]:
