@@ -130,55 +130,58 @@ class TextAnalyzer(PreparerText, Courses, ParserTut, ParserMovieKiev):
 	prepare answer message for user and cut it, if it is too large
 	"""
 	def prepare_anwer(self, text):
-		if self.type == "rate_on_date":
-			if self.curr:
-				if self.date:
-					currs_on_date_by_abbr = self.get_currencies_on_date_by_abbr(money_abbr=self.curr, date=self.date)
-					answer_text = self.do_courses_on_date_text(currs_on_date_by_abbr=currs_on_date_by_abbr)
-					logger.info("Message on date is ok")
+		try:
+			if self.type == "rate_on_date":
+				if self.curr:
+					if self.date:
+						currs_on_date_by_abbr = self.get_currencies_on_date_by_abbr(money_abbr=self.curr, date=self.date)
+						answer_text = self.do_courses_on_date_text(currs_on_date_by_abbr=currs_on_date_by_abbr)
+						logger.info("Message on date is ok")
+					else:
+						logger.info("Message anser - Date in not founded")
+						answer_text = "Enter please Date after keyword \"на\" in format YYYY-MM-DD"
 				else:
-					logger.info("Message anser - Date in not founded")
-					answer_text = "Enter please Date after keyword \"на\" in format YYYY-MM-DD"
-			else:
-				logger.info("Message anwser - Currency in not founded")
-				answer_text = "Enter please currency abbreviation after keyword \"курс\""
+					logger.info("Message anwser - Currency in not founded")
+					answer_text = "Enter please currency abbreviation after keyword \"курс\""
 
-		if self.type == "rate_dynamic":
-			if self.curr:
-				if self.period:
-					curr_dynamic_data = self.get_dynamic_rate_by_periоd_money_abbr(period=self.period, money_abbr=self.curr)
-					answer_text = self.do_courses_dynamics_text(curr_dynamic_data=curr_dynamic_data)
+			if self.type == "rate_dynamic":
+				if self.curr:
+					if self.period:
+						curr_dynamic_data = self.get_dynamic_rate_by_periоd_money_abbr(period=self.period, money_abbr=self.curr)
+						answer_text = self.do_courses_dynamics_text(curr_dynamic_data=curr_dynamic_data)
+					else:
+						logger.info("Message answer - period in not founded ")
+						answer_text= " Enter please period as ceil number"
 				else:
-					logger.info("Message answer - period in not founded ")
-					answer_text= " Enter please period as ceil number"
-			else:
-				logger.info("Message anwser - Currency in not founded")
-				answer_text = "Enter please currency abbreviation after keyword \"курс\""
+					logger.info("Message anwser - Currency in not founded")
+					answer_text = "Enter please currency abbreviation after keyword \"курс\""
 
-		if self.type == "movies":
+			if self.type == "movies":
 
-			if self.city:
-				if self.city == "Minsk" or self.city == "Минск":
-					movies = self.get_movies_info_minsk()
+				if self.city:
+					if self.city == "Minsk" or self.city == "Минск":
+						movies = self.get_movies_info_minsk()
+					else:
+						movies = self.get_movies_info_kiev()
+					answer_text = self.do_movies_text(movies)
+					print(len(answer_text))
+					logger.info("Message answer movies is successfull")
 				else:
-					movies = self.get_movies_info_kiev()
-				answer_text = self.do_movies_text(movies)
-				print(len(answer_text))
-				logger.info("Message answer movies is successfull")
-			else:
-				answer_text = "Enter please city Минск or Киев"
-				logger.warning("City is not founded")
+					answer_text = f"Enter please message as <Кино city>\n Select city from list({settings.CITIES}) "
+					logger.warning("City is not founded")
 
 
-		if  self.type == "echo":
-			logger.info("Message answer - echo(repeat)")
-			answer_text = text
+			if  self.type == "echo":
+				logger.info("Message answer - echo(repeat)")
+				answer_text = f"{text}.\nИзвини в ответах я ограничен. Правильно задавай вопрос "
 
-		if len(answer_text) > settings.MAX_LIMIT_TEXT:
-			answer_text = answer_text[0:settings.MAX_LIMIT_TEXT]
-			logger.warning("Message is too large and was cut")
+			if len(answer_text) > settings.MAX_LIMIT_TEXT:
+				answer_text = answer_text[0:settings.MAX_LIMIT_TEXT]
+				logger.warning("Message is too large and was cut")
+
+		except Exception as ex:
+			answer_text = f"{ex}"	
 		return answer_text
-
 
 	def do_analys_text(self, text):
 		self.get_type_user_message(text)
