@@ -17,6 +17,6 @@ handlers:
     formatter: warning
 loggers:
   simpleExample:
-    level: INFO
+    level: WARNING
     handlers: [console, file_warning]
 
