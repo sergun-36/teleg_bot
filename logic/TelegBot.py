@@ -1,5 +1,6 @@
 import requests
 from . import settings
+import time
 
 from .TextAnalyzer import TextAnalyzer
 
@@ -65,4 +66,4 @@ class TelegBot(TextAnalyzer):
 			else:
 				print(f"Can\'t take updates : {updates['error_message']}")
 				logger.warning(f"Can\'t take updates : {updates['error_message']}")
-
+			time.sleep(3)
