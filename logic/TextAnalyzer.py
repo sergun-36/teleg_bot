@@ -6,7 +6,7 @@ from .PreparerText import PreparerText
 from .Courses import Courses
 from .ParserTut import ParserTut
 from .ParserMovieKiev import ParserMovieKiev
-
+from .Vershi import Vershi
 
 """
 import settings
@@ -18,7 +18,7 @@ from ParserTut import ParserTut
 
 logger=settings.logger
 
-class TextAnalyzer(PreparerText, Courses, ParserTut, ParserMovieKiev):
+class TextAnalyzer(PreparerText, Courses, ParserTut, ParserMovieKiev, Vershi):
 
 	
 	"""
@@ -184,10 +184,12 @@ class TextAnalyzer(PreparerText, Courses, ParserTut, ParserMovieKiev):
 
 			if self.type == "vershi":
 				if self.versh_name:
-					answer_text= "I'm analysing your versh request"
-					pass
+					logger.info(f"text for poem {self.versh_name} is searching")
+					answer_text= self.get_versh_text(self.versh_name)
+					logger.info(f"text for poem {self.versh_name} is ready")					
 				else:
 					answer_text = "Please enter name of poem after key word <стих>"
+					logger.warning("Name of poem is not found in user message")
 
 
 			if  self.type == "echo":

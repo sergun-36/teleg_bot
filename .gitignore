@@ -3,4 +3,4 @@ log.txt
 log_warning.txt
 .env
 *.txt
-logic/vershi
+logic/vershi/*.txt
