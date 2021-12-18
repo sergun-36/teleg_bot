@@ -141,7 +141,7 @@ class TextAnalyzer(PreparerText, Courses, ParserTut, ParserMovieKiev, Vershi):
 	"""
 	prepare answer message for user and cut it, if it is too large
 	"""
-	def prepare_anwer(self, text):
+	def prepare_anwer(self, text, user_first_name = None):
 		try:
 			if self.type == "rate_on_date":
 				if self.curr:
@@ -185,7 +185,7 @@ class TextAnalyzer(PreparerText, Courses, ParserTut, ParserMovieKiev, Vershi):
 			if self.type == "vershi":
 				if self.versh_name:
 					logger.info(f"text for poem {self.versh_name} is searching")
-					answer_text= self.get_versh_text(self.versh_name)
+					answer_text= self.get_versh_text(self.versh_name, user_first_name)
 					logger.info(f"text for poem {self.versh_name} is ready")					
 				else:
 					answer_text = "Please enter name of poem after key word <стих>"
@@ -204,7 +204,7 @@ class TextAnalyzer(PreparerText, Courses, ParserTut, ParserMovieKiev, Vershi):
 			answer_text = f"{ex}"	
 		return answer_text
 
-	def do_analys_text(self, text):
+	def do_analys_text(self, text, user_first_name = None):
 		self.get_type_user_message(text)
 		if self.type == "rate_on_date":
 			self.get_date_from_text(text)
@@ -217,7 +217,7 @@ class TextAnalyzer(PreparerText, Courses, ParserTut, ParserMovieKiev, Vershi):
 		if self.type == "vershi":
 			self.get_versh_name(text)
 
-		text = self.prepare_anwer(text)
+		text = self.prepare_anwer(text, user_first_name = user_first_name)
 		return text
 
 '''

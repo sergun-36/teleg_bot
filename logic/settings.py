@@ -28,5 +28,6 @@ MAX_LIMIT_TEXT = 4096
 
 CITIES = ("Минск", "Киев", "Minsk", "Kiev")
 
-vershi = {"сало печали" : "kummerspeck.txt",
-			"новый год": "new_year.txt"}
+vershi = {"сало печали": "kummerspeck.txt",
+			"новый год": "new_year.txt",
+			"новый год_love": "new_year_love.txt" }

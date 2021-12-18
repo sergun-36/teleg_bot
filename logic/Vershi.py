@@ -13,7 +13,12 @@ class Vershi():
 			scroll_name_versh+=f"\n{versh.capitalize()}"
 		return scroll_name_versh
 
-	def get_versh_text(self, name):
+	def get_versh_text(self, name, user_first_name = None):
+		if user_first_name == "Valeri Ignis":
+			new_name =f"{name}_love"
+			if self.vershi.get(new_name):
+				name = new_name
+
 		if self.vershi.get(name):
 			try:
 				with open(os.path.join("logic","vershi", self.vershi[name]), "r") as f:
