@@ -10,7 +10,10 @@ class Vershi():
 	def create_message_with_vershi(self):
 		scroll_name_versh = ""
 		for versh in self.vershi:
-			scroll_name_versh+=f"\n{versh.capitalize()}"
+			if versh[-5:] == "_love":
+				pass
+			else:
+				scroll_name_versh+=f"\n{versh.capitalize()}"
 		return scroll_name_versh
 
 	def get_versh_text(self, name, user_first_name = None):
