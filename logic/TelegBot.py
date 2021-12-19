@@ -1,5 +1,6 @@
 import requests
 from . import settings
+import time
 
 from .TextAnalyzer import TextAnalyzer
 
@@ -56,7 +57,8 @@ class TelegBot(TextAnalyzer):
 					if dynamic_last_message_id > last_message_id:
 						chat_id = updates["result"][-1]["message"]["chat"]["id"]
 						text = updates["result"][-1]["message"]["text"]
-						text_answer=self.do_analys_text(text)
+						user_first_name = updates["result"][-1]["message"]["chat"]["first_name"]
+						text_answer=self.do_analys_text(text, user_first_name=user_first_name)
 						self.send_message(chat_id=chat_id, text=text_answer)
 						last_message_id=dynamic_last_message_id
 				else:
@@ -65,4 +67,4 @@ class TelegBot(TextAnalyzer):
 			else:
 				print(f"Can\'t take updates : {updates['error_message']}")
 				logger.warning(f"Can\'t take updates : {updates['error_message']}")
-
+			time.sleep(2)
