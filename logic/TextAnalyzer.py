@@ -184,9 +184,13 @@ class TextAnalyzer(PreparerText, Courses, ParserTut, ParserMovieKiev, Vershi):
 
 			if self.type == "vershi":
 				if self.versh_name:
-					logger.info(f"text for poem {self.versh_name} is searching")
-					answer_text= self.get_versh_text(self.versh_name, user_first_name)
-					logger.info(f"text for poem {self.versh_name} is ready")					
+					if not self.versh_name[-5:] == "_love":
+						logger.info(f"text for poem {self.versh_name} is searching")
+						answer_text= self.get_versh_text(self.versh_name, user_first_name)
+						logger.info(f"text for poem {self.versh_name} is ready")
+					else:
+						answer_text = f"Sorry. Poem with name \'{self.versh_name}\' does not exist"
+						logger.warning(f"Ignore request for {self.versh_name} poem")					
 				else:
 					answer_text = "Please enter name of poem after key word <стих>"
 					logger.warning("Name of poem is not found in user message")
