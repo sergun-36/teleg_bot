@@ -56,9 +56,14 @@ class TelegBot(TextAnalyzer):
 					dynamic_last_message_id=updates["result"][-1]["message"]["message_id"]
 					if dynamic_last_message_id > last_message_id:
 						chat_id = updates["result"][-1]["message"]["chat"]["id"]
-						text = updates["result"][-1]["message"]["text"]
-						user_first_name = updates["result"][-1]["message"]["chat"]["first_name"]
-						text_answer=self.do_analys_text(text, user_first_name=user_first_name)
+						text = updates["result"][-1]["message"].get("text")
+						if text:
+							logger.info("Text handle in bot")
+							user_first_name = updates["result"][-1]["message"]["chat"]["first_name"]
+							text_answer=self.do_analys_text(text, user_first_name=user_first_name)
+						else:
+							text_answer = "Sorry. I can handl only text"
+							logger.warning("text is absent in message")
 						self.send_message(chat_id=chat_id, text=text_answer)
 						last_message_id=dynamic_last_message_id
 				else:
