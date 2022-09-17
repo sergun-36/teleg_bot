@@ -66,3 +66,14 @@ class TelegBot(TextAnalyzer):
 				print(f"Can\'t take updates : {updates['error_message']}")
 				logger.warning(f"Can\'t take updates : {updates['error_message']}")
 
+	def webhook(self, url):
+		response = requests.post(f"{self.root_url}/setWebhook", {"url":url})
+		if response.status_code in settings.OK_CODES:
+			return True
+		else:
+			return False
+
+	def get_webhook_info(self, url):
+		return requests.get(f"{self.root_url}/getWebhookInfo", {"url":url}).json()
+
+
