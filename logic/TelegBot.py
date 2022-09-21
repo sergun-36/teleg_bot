@@ -7,6 +7,7 @@ logger=settings.logger
 
 class TelegBot(TextAnalyzer):
 	root_url=settings.TELEG_ROOT_URL
+	webhook_url=settings.WEBHOOK_URL
 	
 	def get_updates(self):
 		try:
@@ -66,8 +67,16 @@ class TelegBot(TextAnalyzer):
 				print(f"Can\'t take updates : {updates['error_message']}")
 				logger.warning(f"Can\'t take updates : {updates['error_message']}")
 
-	def webhook(self, url):
-		response = requests.post(f"{self.root_url}/setWebhook", {"url":url})
+
+	def handling_message(self, updates):
+		chat_id = updates["message"]["chat"]["id"]
+		text = updates["message"]["text"]
+		text_answer=self.do_analys_text(text)
+		self.send_message(chat_id=chat_id, text=text_answer)
+
+
+	def webhook(self):
+		response = requests.post(f"{self.root_url}/setWebhook", {"url": self.webhook_url})
 		if response.status_code in settings.OK_CODES:
 			return True
 		else:

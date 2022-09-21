@@ -11,8 +11,11 @@ logger = logging.getLogger('simpleExample')
 
 dotenv.load_dotenv(".env")
 bot_token = os.environ['TOKEN']
+webhook_url_root = os.environ['WEBHOOK_URL']
 
 TELEG_ROOT_URL = f"https://api.telegram.org/bot{bot_token}"
+WEBHOOK_URL = f"{webhook_url_root}/{bot_token}"
+
 OK_CODES = (200, 201, 202)
 RB_BANK_ROOT_URL = "https://www.nbrb.by/api/exrates/rates"
 

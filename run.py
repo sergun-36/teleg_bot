@@ -1,14 +1,10 @@
 from  logic.TelegBot import TelegBot
 from flask import Flask, request
+from logic.settings import bot_token
 
-url = "https://fb37-46-53-248-212.eu.ngrok.io"
-
-secret = "JHDLHIudshfoishoIHUL"
+secret = bot_token
 bot=TelegBot()
-#bot.get_updates()
-#bot.polling()
-bot.webhook(f"{url}/{secret}")
-print(bot.get_webhook_info(url))
+bot.webhook()
 
 app = Flask(__name__)
 
@@ -16,9 +12,8 @@ app = Flask(__name__)
 def webhook():
 	#bot.process_new_updates([telebot.types.Update.de_json(request.stream.read().decode("utf-8"))])
 	updates = request.json
-	print(updates)
-	pass
-	return "ok"
+	bot.handling_message(updates)
+	return "ok", 200
 
 if __name__ == "__main__":
 	app.run()
