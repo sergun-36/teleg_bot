@@ -1,6 +1,5 @@
-from  logic.TelegBot import TelegBot
-from logic.settings import TELEG_ROOT_URL
+from logic.app import app
 
 if __name__ == "__main__":
-	bot=TelegBot()
-	bot.polling()
+	app.run(debug=True)
+
