@@ -1,5 +1,6 @@
 import requests
 from . import settings
+import time
 
 from .TextAnalyzer import TextAnalyzer
 
@@ -56,8 +57,14 @@ class TelegBot(TextAnalyzer):
 					dynamic_last_message_id=updates["result"][-1]["message"]["message_id"]
 					if dynamic_last_message_id > last_message_id:
 						chat_id = updates["result"][-1]["message"]["chat"]["id"]
-						text = updates["result"][-1]["message"]["text"]
-						text_answer=self.do_analys_text(text)
+						text = updates["result"][-1]["message"].get("text")
+						if text:
+							logger.info("Text handle in bot")
+							user_first_name = updates["result"][-1]["message"]["chat"]["first_name"]
+							text_answer=self.do_analys_text(text, user_first_name=user_first_name)
+						else:
+							text_answer = "Sorry. I can handl only text"
+							logger.warning("text is absent in message")
 						self.send_message(chat_id=chat_id, text=text_answer)
 						last_message_id=dynamic_last_message_id
 				else:
@@ -66,6 +73,7 @@ class TelegBot(TextAnalyzer):
 			else:
 				print(f"Can\'t take updates : {updates['error_message']}")
 				logger.warning(f"Can\'t take updates : {updates['error_message']}")
+
 
 
 	def handling_message(self, updates):
@@ -84,5 +92,6 @@ class TelegBot(TextAnalyzer):
 
 	def get_webhook_info(self, url):
 		return requests.get(f"{self.root_url}/getWebhookInfo", {"url":url}).json()
+
 
 

@@ -6,17 +6,19 @@ from .PreparerText import PreparerText
 from .Courses import Courses
 from .ParserTut import ParserTut
 from .ParserMovieKiev import ParserMovieKiev
+from .Vershi import Vershi
+
 """
 import settings
 from PreparerText import PreparerText
 from Courses import Courses
 from ParserTut import ParserTut
-"""
 
+"""
 
 logger=settings.logger
 
-class TextAnalyzer(PreparerText, Courses, ParserTut, ParserMovieKiev):
+class TextAnalyzer(PreparerText, Courses, ParserTut, ParserMovieKiev, Vershi):
 
 	
 	"""
@@ -86,6 +88,8 @@ class TextAnalyzer(PreparerText, Courses, ParserTut, ParserMovieKiev):
 				type = "rate_on_date"
 		elif "кино" in text:
 			type = "movies"
+		elif "стих" in text:
+			type = "vershi"
 		else:
 			type = "echo"
 		logger.info(f"Type of user message - {type}")
@@ -126,10 +130,18 @@ class TextAnalyzer(PreparerText, Courses, ParserTut, ParserMovieKiev):
 
 		self.set_data(city=city)
 
+
+	def get_versh_name(self, text):
+		text = text.lower()
+		number = text.find("стих")+4
+		versh_name = text[number:].strip()
+		
+		self.set_data(versh_name=versh_name)
+
 	"""
 	prepare answer message for user and cut it, if it is too large
 	"""
-	def prepare_anwer(self, text):
+	def prepare_anwer(self, text, user_first_name = None):
 		try:
 			if self.type == "rate_on_date":
 				if self.curr:
@@ -170,6 +182,19 @@ class TextAnalyzer(PreparerText, Courses, ParserTut, ParserMovieKiev):
 					answer_text = f"Enter please message as <Кино city>\n Select city from list({settings.CITIES}) "
 					logger.warning("City is not founded")
 
+			if self.type == "vershi":
+				if self.versh_name:
+					if not self.versh_name[-5:] == "_love":
+						logger.info(f"text for poem {self.versh_name} is searching")
+						answer_text= self.get_versh_text(self.versh_name, user_first_name)
+						logger.info(f"text for poem {self.versh_name} is ready")
+					else:
+						answer_text = f"Sorry. Poem with name \'{self.versh_name}\' does not exist"
+						logger.warning(f"Ignore request for {self.versh_name} poem")					
+				else:
+					answer_text = "Please enter name of poem after key word <стих>"
+					logger.warning("Name of poem is not found in user message")
+
 
 			if  self.type == "echo":
 				logger.info("Message answer - echo(repeat)")
@@ -183,7 +208,7 @@ class TextAnalyzer(PreparerText, Courses, ParserTut, ParserMovieKiev):
 			answer_text = f"{ex}"	
 		return answer_text
 
-	def do_analys_text(self, text):
+	def do_analys_text(self, text, user_first_name = None):
 		self.get_type_user_message(text)
 		if self.type == "rate_on_date":
 			self.get_date_from_text(text)
@@ -193,12 +218,21 @@ class TextAnalyzer(PreparerText, Courses, ParserTut, ParserMovieKiev):
 			self.get_period_from_text(text)
 		if self.type == "movies":
 			self.get_city_from_text(text)
+		if self.type == "vershi":
+			self.get_versh_name(text)
 
-		text = self.prepare_anwer(text)
+		text = self.prepare_anwer(text, user_first_name = user_first_name)
 		return text
 
-"""
-text = TextAnalyzer()
-words = text.do_analys_text("кино")
+'''
+
+def get_versh_name(text):
+	text = text.lower()
+	number = text.find("стих")+4
+	versh_name = text[number:].strip()
+	print(bool(versh_name))
+
+
+words = get_versh_name("стих")
 print(words)
-"""
+'''

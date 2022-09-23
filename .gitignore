@@ -2,3 +2,5 @@ logic/__pycache__/
 log.txt
 log_warning.txt
 .env
+*.txt
+logic/vershi/*.txt
